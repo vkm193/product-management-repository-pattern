@@ -1,0 +1,55 @@
+﻿@page "/productlist"
+
+@using Product.Service.Services.Products
+@using Product.Service.ViewModels
+@inject IProductService ProductService
+
+<h1>Products</h1>
+
+@if (products == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Add To Cart</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in products)
+            {
+            <tr>
+                <td>
+                    <img style="width:100px; height:100px;" src="@product.ImageUrl" />
+                </td>
+                <td>@product.Name</td>
+                <td>@product.Description</td>
+                <td>@product.SalePrice</td>
+                <td><button><span class="oi oi-plus" aria-hidden="true"></span></button></td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<ProductModel> products = new List<ProductModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var prods = await Task.Run(() => ProductService.GetAll());
+        foreach (var product in prods)
+        {
+            product.ImageUrl = "../Images/" + product.ImageUrl;
+            products.Add(product);
+        }
+        
+    }
+}

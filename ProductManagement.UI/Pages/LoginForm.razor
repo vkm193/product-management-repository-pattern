@@ -1,0 +1,81 @@
+﻿@page "/loginform"
+
+@using Product.Service.ViewModels
+
+@inject Product.Service.Services.User.ILoginService loginService
+
+
+<h2>Login</h2>
+
+
+<EditForm Model="@loginModel" OnValidSubmit="HandleValidSubmit">
+
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <p>
+        <label>
+            Email:
+            <InputText @bind-Value="loginModel.Email" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Password:
+            <InputText type="Password" @bind-Value="loginModel.Password" />
+        </label>
+    </p>
+
+    <button type="submit" @onclick="@(async e => await LoginUser())">Submit</button>
+    @if (errorMessage != null && errorMessage.Length > 0)
+    {
+        <div>
+            @errorMessage
+        </div>
+    }
+    else if (successMessage != null && successMessage.Length > 0)
+    {
+        <div>
+            @successMessage
+        </div>
+    }
+
+</EditForm>
+
+@code {
+
+    private LoginModel loginModel = new LoginModel();
+
+    private void HandleValidSubmit()
+    {
+       
+    }
+
+    string successMessage = "";
+    string errorMessage = "";
+
+    private async Task LoginUser()
+    {
+        if (!String.IsNullOrEmpty(loginModel.Email))
+        {
+            
+            if (loginService.IsValidUser(loginModel))
+            {
+                await Task.Run(() => loginService.LoginUser(loginModel));
+                successMessage = $"{loginModel.Email}, signed in.";
+                errorMessage = "";
+            }
+            else
+            {
+                successMessage = "";
+                errorMessage = "Username or password is incorrect.";
+            }
+        }
+        else
+        {
+            successMessage = "";
+            errorMessage = "Provide a username.";
+        }
+    }
+
+}

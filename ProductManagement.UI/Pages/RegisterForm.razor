@@ -1,0 +1,90 @@
+﻿@page "/registerform"
+
+@using Product.Service.ViewModels
+
+@inject Product.Service.Services.User.IUserService userService
+
+
+<h2>Register</h2>
+
+
+<EditForm Model="@registerModel" OnValidSubmit="HandleValidSubmit">
+
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <p>
+        <label>
+            First Name:
+            <InputText @bind-Value="registerModel.FirstName" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Last Name:
+            <InputText @bind-Value="registerModel.LastName" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Email:
+            <InputText @bind-Value="registerModel.Email" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Mobile:
+            <InputText @bind-Value="registerModel.Mobile" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Address:
+            <InputTextArea @bind-Value="registerModel.Address" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Password:
+            <InputText type="Password" @bind-Value="registerModel.Password" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Confirm Password:
+            <InputText type="Password" @bind-Value="registerModel.ConfirmPassword" />
+        </label>
+    </p>
+
+    <button type="submit">Submit</button>
+
+
+</EditForm>
+
+@code {
+
+    private RegisterModel registerModel = new RegisterModel();
+
+    private void HandleValidSubmit()
+    {
+        userService.Save(registerModel);
+
+        //successMessage = "User registered successfully.";
+    }
+
+    //string successMessage = "";
+    //string errorMessage = "";
+
+    //private async Task RegisterUser()
+    //{
+    //    if ()
+    //    {
+
+    //    }
+    //    else
+    //    {
+    //        errorMessage = "Invalid details."
+    //    }
+
+    //}
+
+}
